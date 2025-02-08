@@ -1,0 +1,143 @@
+#include <LiquidCrystal.h>
+const int in1=3,  in2=2,  in3=13,  in4=12 ;
+
+int trig = 10, echo = 11;         
+float duration, distance;
+int ldr = A0;
+
+const int rs=9, en=8, D4=4, D5=5, D6=6, D7=7;
+LiquidCrystal lcd (rs, en, D4, D5, D6, D7);
+
+void setup() {
+
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+  pinMode(ldr, INPUT);
+  Serial.begin(9600);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in1, LOW);
+  digitalWrite(in4, HIGH);
+  digitalWrite(in3, LOW);
+  lcd.begin(16,2);
+  lcd.setCursor(0,0);
+  
+}
+
+void loop() {
+    
+  //ULTRA SONIC SENSOR
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+  duration = pulseIn(echo, HIGH);
+  distance = 0.017 * duration;
+  int ldr_state = analogRead(ldr);
+
+  
+  // DETECTING AT DAY
+    if (ldr_state<400)
+    {
+      if ( distance >= 80)
+       {
+          // lcd.setCursor(0,0);
+          // lcd.print("No Obstacles");
+          // Serial.println("No Obstacles");
+          // Serial.print("width: ");
+          Serial.print(distance);
+          Serial.println(" cm"); 
+          digitalWrite(in2, HIGH);
+          digitalWrite(in1, LOW);
+          digitalWrite(in4, HIGH);
+          digitalWrite(in3, LOW);
+          delay(100);  
+        }
+
+         else if (distance <13)
+      {
+       // lcd.setCursor(0,0);
+       // lcd.print("Warning !");
+        //Serial.println("Warning !");
+        //Serial.print("width: ");
+        Serial.print(distance);
+        Serial.println(" cm"); 
+          digitalWrite(in2, HIGH);
+          digitalWrite(in1, LOW);
+          digitalWrite(in4, HIGH);
+          digitalWrite(in3, LOW);
+        delay(100);
+      }
+      
+    else if (10<= distance< 50)
+      {
+        //lcd.setCursor(0,0);
+        //lcd.print("detected");        
+        //Serial.println("  Detected");
+        //Serial.print("width: ");
+        Serial.print(distance);
+        Serial.println(" cm"); 
+         digitalWrite(in2, HIGH);
+        digitalWrite(in1, LOW);
+        digitalWrite(in4, HIGH);
+        digitalWrite(in3, LOW);
+        delay(100);
+      }
+    
+      else
+      {
+        }
+     }
+
+   else{
+      if ( distance >= 80)
+       {
+           lcd.setCursor(0,0);
+           lcd.print("No Obstacles");
+          // Serial.println("No Obstacles");
+          // Serial.print("width: ");
+          Serial.print(distance);
+          Serial.println(" cm"); 
+          digitalWrite(in2, HIGH);
+          digitalWrite(in1, LOW);
+          digitalWrite(in4, HIGH);
+           digitalWrite(in3, LOW);
+          delay(100);  
+          lcd.clear();
+        }
+
+         else if (distance <13)
+      {
+        lcd.setCursor(0,0);
+        lcd.print("Warning !");
+        Serial.println("Warning !");
+       // Serial.print("width: ");
+        Serial.print(distance);
+        Serial.println(" cm"); 
+       digitalWrite(in2, LOW);
+       digitalWrite(in1, LOW);
+       digitalWrite(in4, LOW);
+       digitalWrite(in3, LOW);
+        delay(100);
+        lcd.clear();
+      }
+      
+    else if (10<= distance< 50)
+      {
+        lcd.setCursor(0,0);
+        lcd.print("detected");        
+        Serial.println("  Detected");
+      //  Serial.print("width: ");
+        Serial.print(distance);
+        Serial.println(" cm"); 
+        digitalWrite(in2, HIGH);
+        digitalWrite(in1, LOW);
+        digitalWrite(in4, HIGH);
+        digitalWrite(in3, LOW);
+        delay(100);
+        lcd.clear();
+      }
+   }
+  }
